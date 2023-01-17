@@ -50,6 +50,14 @@ def main() -> None:
         response.headers["X-Process-Time"] = str(process_time)
         return response
 
+    @app.on_event("startup")
+    async def startup_event():
+        print('hello')
+
+    @app.on_event("shutdown")
+    async def startup_event():
+        print('bye')
+
     uvicorn.run(app, host='127.0.0.1', port=8000)
 
 
