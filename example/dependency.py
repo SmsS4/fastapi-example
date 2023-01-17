@@ -1,5 +1,7 @@
-from fastapi import Depends, Header, HTTPException
 from fastapi import APIRouter
+from fastapi import Depends
+from fastapi import Header
+from fastapi import HTTPException
 
 
 async def verify_key(x_key: str = Header()):
@@ -15,7 +17,7 @@ router = APIRouter(
 
 async def common_parameters(q: str | None = None, skip: int = 0, limit: int = 100):
     yield {"q": q, "skip": skip, "limit": limit}
-    print('execute after response')
+    print("execute after response")
 
 
 @router.get("/items/")

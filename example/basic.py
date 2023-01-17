@@ -1,19 +1,21 @@
 from datetime import datetime
+from enum import Enum
 from typing import Any
 
-from fastapi import APIRouter, Query, Path, Body, Header, Form, HTTPException
-from enum import Enum
-
-from fastapi.exceptions import RequestValidationError
-from pydantic import BaseModel
-from fastapi.responses import PlainTextResponse
+from fastapi import APIRouter
+from fastapi import Body
+from fastapi import Form
+from fastapi import Header
+from fastapi import HTTPException
+from fastapi import Path
+from fastapi import Query
 from fastapi.encoders import jsonable_encoder
+from fastapi.exceptions import RequestValidationError
+from fastapi.responses import PlainTextResponse
+from pydantic import BaseModel
 
 # https://fastapi.tiangolo.com/tutorial/bigger-applications/
-router = APIRouter(
-    prefix='/basic',
-    tags=['basic']
-)
+router = APIRouter(prefix="/basic", tags=["basic"])
 
 
 # Path value
@@ -25,9 +27,7 @@ class ModelName(str, Enum):
 
 @router.get("/{item_id}/{model_name}/{text}")
 async def get_model(
-        item_id: int,
-        model_name: ModelName,
-        text: str = Path(title='test text')
+    item_id: int, model_name: ModelName, text: str = Path(title="test text")
 ):
     return {
         "model_name": model_name,
@@ -39,15 +39,16 @@ async def get_model(
 # Query params
 @router.get("/with_q")
 async def read_item(
-        q: str | None = None,
-        p: str | None = Query(
-            default=...,
-            max_length=50,
-            description="Query string for the items to search in the database that have a good match",
-            example='hello',
-        )
+    q: str | None = None,
+    p: str
+    | None = Query(
+        default=...,
+        max_length=50,
+        description="Query string for the items to search in the database that have a good match",
+        example="hello",
+    ),
 ):
-    return {'q': q, 'p': p}
+    return {"q": q, "p": p}
 
 
 # Body
@@ -75,36 +76,36 @@ async def create_item(item: Item):
 
 @router.put("/")
 async def update_item(
-        *,
-        item: Item = Body(
-            examples={
-                "normal": {
-                    "summary": "A normal example",
-                    "description": "A **normal** item works correctly.",
-                    "value": {
-                        "name": "Foo",
-                        "description": "A very nice Item",
-                        "price": 35.4,
-                        "tax": 3.2,
-                    },
-                },
-                "converted": {
-                    "summary": "An example with converted data",
-                    "description": "FastAPI can convert price `strings` to actual `numbers` automatically",
-                    "value": {
-                        "name": "Bar",
-                        "price": "35.4",
-                    },
-                },
-                "invalid": {
-                    "summary": "Invalid data is rejected with an error",
-                    "value": {
-                        "name": "Baz",
-                        "price": "thirty five point four",
-                    },
+    *,
+    item: Item = Body(
+        examples={
+            "normal": {
+                "summary": "A normal example",
+                "description": "A **normal** item works correctly.",
+                "value": {
+                    "name": "Foo",
+                    "description": "A very nice Item",
+                    "price": 35.4,
+                    "tax": 3.2,
                 },
             },
-        ),
+            "converted": {
+                "summary": "An example with converted data",
+                "description": "FastAPI can convert price `strings` to actual `numbers` automatically",
+                "value": {
+                    "name": "Bar",
+                    "price": "35.4",
+                },
+            },
+            "invalid": {
+                "summary": "Invalid data is rejected with an error",
+                "value": {
+                    "name": "Baz",
+                    "price": "thirty five point four",
+                },
+            },
+        },
+    ),
 ):
     results = {"item": item}
     return results
@@ -117,6 +118,7 @@ async def read_items(user_agent: str | None = Header(default=None)):
 
 
 # Response
+
 
 class ItemR(BaseModel):
     name: str
@@ -144,7 +146,8 @@ async def login(username: str = Form(), password: str = Form()):
 
 # Error handling
 
-@router.get('/fail')
+
+@router.get("/fail")
 async def read_item():
     raise HTTPException(status_code=404, detail="Item not found")
 
@@ -153,7 +156,7 @@ async def read_item():
 @router.post(
     "/meta/",
     response_model=Item,
-    tags=['tag1', 'test2'],
+    tags=["tag1", "test2"],
     summary="Create an item",
     description="Create an item with all the information, name, description, price, tax and a set of unique tags",
 )
@@ -162,6 +165,7 @@ async def create_item(item: Item):
 
 
 # JSON
+
 
 class JsonItem(BaseModel):
     title: str

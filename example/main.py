@@ -1,9 +1,11 @@
+import time
+
 import uvicorn
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
+from fastapi import Request
 from fastapi.exceptions import RequestValidationError
 from fastapi.responses import PlainTextResponse
 
-import time
 tags_metadata = [
     {
         "name": "users",
@@ -19,10 +21,11 @@ tags_metadata = [
     },
 ]
 
+
 def main() -> None:
     app = FastAPI(
         title="ChimichangApp",
-        description='description',
+        description="description",
         version="0.0.1",
         terms_of_service="http://example.com/terms/",
         contact={
@@ -52,14 +55,14 @@ def main() -> None:
 
     @app.on_event("startup")
     async def startup_event():
-        print('hello')
+        print("hello")
 
     @app.on_event("shutdown")
     async def startup_event():
-        print('bye')
+        print("bye")
 
-    uvicorn.run(app, host='127.0.0.1', port=8000)
+    uvicorn.run(app, host="127.0.0.1", port=8000)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     main()
